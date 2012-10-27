@@ -7,7 +7,7 @@ application.debug = True
 
 @application.route('/autocomplete', methods=['GET'])
 def autocomplete():
-    conn = psycopg2.connect("dbname=autocomplete-tribute user=christian")
+    conn = psycopg2.connect("dbname=autocomplete-tribute user=<USER>")
     cursor = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
     where = {}
     if request.args['query']:
@@ -15,6 +15,6 @@ def autocomplete():
         fields = ['adjective', 'animal', 'version']
         where[('||'.join(fields), 'ilike')] = set(['%%%s%%' % v for v in query_tokens])
     json_out = {'success': True, 
-                'data': db.select(cursor, 'ubuntu', where=where, order_by='id', debug_assert=True)}
+                'data': db.select(cursor, 'ubuntu', where=where, order_by='id')}
     return json.dumps(json_out)
     
